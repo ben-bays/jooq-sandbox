@@ -1,0 +1,14 @@
+
+
+
+flyway:
+  enabled: false
+
+spring:
+  datasource:
+    url: 'jdbc:postgresql://${db.host:localhost}:${db.port:5432}/${db.name:jsx}'
+    username: 'jsx'
+    password: 'testpwd!123'
+    driver-class-name: org.postgresql.Driver
+  jooq:
+    sql-dialect: postgres

@@ -1,0 +1,142 @@
+
+import groovy.xml.MarkupBuilder
+
+buildscript {
+	ext {
+		springBootVersion = '1.5.9.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath('org.jooq:jooq-codegen:3.9.6')
+		classpath('org.flywaydb:flyway-core:5.0.6')
+		classpath('org.postgresql:postgresql:9.4.1212.jre7')
+	}
+}
+
+
+plugins {
+	id "org.flywaydb.flyway" version "5.0.6"
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.campk'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+ext {
+	springCloudVersion = 'Edgware.SR1'
+}
+
+configurations {
+	compile.extendsFrom generatedCompile
+}
+
+sourceSets {
+	generated
+	main {
+		compileClasspath += generated.output
+	}
+}
+
+dependencies {
+
+	generatedCompile 'org.jooq:jooq:3.9.6'
+	generatedCompile 'org.jooq:jooq-meta:3.9.6'
+	generatedCompile 'org.jooq:jooq-codegen:3.9.6'
+
+
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-actuator-docs')
+	compile('org.springframework.boot:spring-boot-starter-jdbc')
+	compile('org.springframework.boot:spring-boot-starter-web')
+
+	compile 'org.jooq:jooq:3.9.6'
+	//noinspection GrUnresolvedAccess
+	compile("org.flywaydb:flyway-core:$flyway_version")
+	compile 'org.modelmapper:modelmapper:1.1.0'
+
+	runtime('org.springframework.boot:spring-boot-devtools')
+	runtime('org.postgresql:postgresql:9.4.1212.jre7')
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile 'org.testng:testng:6.9.6'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+flyway {
+	url = "jdbc:postgresql://$db_host:$db_port/jsx"
+}
+
+/**
+ * This task will generate the Jooq objects based on our database
+ */
+task generateJooq(dependsOn: flywayMigrate) {
+	doLast {
+
+		final StringWriter writer = new StringWriter()
+		new MarkupBuilder(writer).configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.9.2.xsd') {
+			jdbc() {
+				driver('org.postgresql.Driver')
+				url("jdbc:postgresql://$db_host:$db_port/jsx")
+				user(db_admin_user)
+				password(db_admin_password)
+			}
+			generator() {
+				database() {
+					name('org.jooq.util.postgres.PostgresDatabase')
+					// there is an <inputSchema> we could use here, but it only supports 1 schema.  Need to use
+					// <schemata> to support multiple schemas.
+					schemata {
+						schema {
+							inputSchema('core')
+						}
+						schema {
+							inputSchema('iam')
+						}
+					}
+				}
+
+				// Watch out for this caveat when using MarkupBuilder with "reserved names"
+				// - https://github.com/jOOQ/jOOQ/issues/4797
+				// - http://stackoverflow.com/a/11389034/521799
+				// - https://groups.google.com/forum/#!topic/jooq-user/wi4S9rRxk4A
+				generate([:]) {
+					pojos true
+					daos true
+					// https://github.com/jOOQ/jOOQ/issues/4055
+				}
+				target() {
+					packageName('com.p202.jsx.jooq')
+					directory('src/generated/java')
+				}
+			}
+		}
+
+		//noinspection GrUnresolvedAccess,GroovyAssignabilityCheck,UnnecessaryQualifiedReference
+		org.jooq.util.GenerationTool.generate(
+				javax.xml.bind.JAXB.unmarshal(new StringReader(writer.toString()), org.jooq.util.jaxb.Configuration)
+		)
+	}
+}
+
+compileGeneratedJava.dependsOn clean
+compileGeneratedJava.dependsOn generateJooq
+compileJava.dependsOn compileGeneratedJava
+
+
