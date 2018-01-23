@@ -1,5 +1,6 @@
 package com.p202.jsx.services.photo.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ public class PhotoResponseDto {
 
     private Long id;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 
     private String description;
 
@@ -26,12 +27,16 @@ public class PhotoResponseDto {
         this.id = id;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedDate(LocalDateTime createdAt) {
+        this.createdDate = createdAt;
+    }
+
+    public void setCreatedDate(final Timestamp timestamp) {
+        this.createdDate = timestamp.toLocalDateTime();
     }
 
     public String getDescription() {
@@ -64,7 +69,7 @@ public class PhotoResponseDto {
         if (!(o instanceof PhotoResponseDto)) return false;
         PhotoResponseDto that = (PhotoResponseDto) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(createdAt, that.createdAt) &&
+                Objects.equals(createdDate, that.createdDate) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(ownerId, that.ownerId) &&
                 Objects.equals(email, that.email);
@@ -72,6 +77,6 @@ public class PhotoResponseDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, createdAt, description, ownerId, email);
+        return Objects.hash(id, createdDate, description, ownerId, email);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,13 +38,8 @@ public class UserServiceImpl implements UserService {
                 .selectFrom(User.USER)
                 .fetch();
 
-        final List<UserResponseDto> usersResponse = new ArrayList<>();
-
-        for (final UserRecord record : allUsers) {
-            final UserResponseDto response = mapper.map(record, UserResponseDto.class);
-            usersResponse.add(response);
-        }
-
-        return usersResponse;
+        return allUsers.stream()
+                .map(r -> mapper.map(r, UserResponseDto.class))
+                .collect(Collectors.toList());
     }
 }

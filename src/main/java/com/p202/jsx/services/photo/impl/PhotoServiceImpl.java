@@ -1,17 +1,16 @@
 package com.p202.jsx.services.photo.impl;
 
-import com.p202.jsx.jooq.core.tables.records.PhotoRecord;
-import com.p202.jsx.jooq.iam.tables.records.UserRecord;
 import com.p202.jsx.services.photo.PhotoService;
 import com.p202.jsx.services.photo.dto.PhotoResponseDto;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.p202.jsx.jooq.core.tables.Photo.PHOTO;
 import static com.p202.jsx.jooq.iam.tables.User.USER;
@@ -23,10 +22,12 @@ import static com.p202.jsx.jooq.iam.tables.User.USER;
 public class PhotoServiceImpl implements PhotoService {
 
     private final DSLContext create;
+    private final ModelMapper mapper;
 
     @Autowired
-    public PhotoServiceImpl(final DSLContext create) {
+    public PhotoServiceImpl(final DSLContext create, final ModelMapper mapper) {
         this.create = create;
+        this.mapper = mapper;
     }
 
     /**
@@ -42,22 +43,9 @@ public class PhotoServiceImpl implements PhotoService {
                 .where(PHOTO.OWNER_ID.eq(userId))
                 .fetch();
 
-        final List<PhotoResponseDto> photoResponse = new ArrayList<>();
+        return userPhotoRecords.stream()
+                .map(record -> mapper.map(record, PhotoResponseDto.class))
+                .collect(Collectors.toList());
 
-        for (final Record record : userPhotoRecords) {
-            final PhotoRecord photoRecord = record.into(PHOTO);
-            final UserRecord userRecord = record.into(USER);
-
-            final PhotoResponseDto dto = new PhotoResponseDto();
-            dto.setCreatedAt(photoRecord.getCreatedDate().toLocalDateTime());
-            dto.setDescription(photoRecord.getDescription());
-            dto.setEmail(userRecord.getEmail());
-            dto.setId(photoRecord.getId());
-            dto.setOwnerId(userRecord.getId());
-            photoResponse.add(dto);
-        }
-
-
-        return photoResponse;
     }
 }
