@@ -1,4 +1,4 @@
-package com.p202.jsx.controllers;
+package com.p202.jsx.controllers.user;
 
 import com.p202.jsx.services.user.UserService;
 import com.p202.jsx.services.user.dto.UserResponseDto;
