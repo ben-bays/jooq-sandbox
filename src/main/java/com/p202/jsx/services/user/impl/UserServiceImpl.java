@@ -17,10 +17,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final DSLContext create;
+    private final ModelMapper mapper;
 
     @Autowired
-    public UserServiceImpl(final DSLContext create) {
+    public UserServiceImpl(
+            final DSLContext create,
+            final ModelMapper mapper) {
         this.create = create;
+        this.mapper = mapper;
     }
 
     /**
@@ -35,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
         final List<UserResponseDto> usersResponse = new ArrayList<>();
 
-        final ModelMapper mapper = new ModelMapper();
         for (final UserRecord record : allUsers) {
             final UserResponseDto response = mapper.map(record, UserResponseDto.class);
             usersResponse.add(response);
