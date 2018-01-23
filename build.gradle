@@ -8,10 +8,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('org.jooq:jooq-codegen:3.9.6')
-        classpath('org.flywaydb:flyway-core:5.0.6')
-        classpath('org.postgresql:postgresql:9.4.1212.jre7')
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'org.jooq:jooq-codegen:3.9.6'
+        classpath 'org.flywaydb:flyway-core:5.0.6'
+        classpath 'org.postgresql:postgresql:9.4.1212.jre7'
     }
 }
 
@@ -55,20 +55,20 @@ dependencies {
     generatedCompile 'org.jooq:jooq-codegen:3.9.6'
 
 
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-actuator-docs')
-    compile('org.springframework.boot:spring-boot-starter-jdbc')
-    compile('org.springframework.boot:spring-boot-starter-web')
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-actuator-docs'
+    compile 'org.springframework.boot:spring-boot-starter-jdbc'
+    compile 'org.springframework.boot:spring-boot-starter-web'
 
     compile 'org.jooq:jooq:3.9.6'
     //noinspection GrUnresolvedAccess
-    compile("org.flywaydb:flyway-core:$flyway_version")
+    compile "org.flywaydb:flyway-core:$flyway_version"
     compile 'org.modelmapper:modelmapper:1.1.0'
 
-    runtime('org.springframework.boot:spring-boot-devtools')
-    runtime('org.postgresql:postgresql:9.4.1212.jre7')
+    runtime 'org.springframework.boot:spring-boot-devtools'
+    runtime 'org.postgresql:postgresql:9.4.1212.jre7'
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
     compile 'org.testng:testng:6.9.6'
 }
 
