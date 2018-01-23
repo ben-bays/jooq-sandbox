@@ -117,8 +117,7 @@ task generateJooq(dependsOn: flywayMigrate) {
                 // - https://groups.google.com/forum/#!topic/jooq-user/wi4S9rRxk4A
                 generate([:]) {
                     pojos true
-                    daos true
-                    // https://github.com/jOOQ/jOOQ/issues/4055
+                    daos false
                 }
                 target() {
                     packageName('com.p202.jsx.jooq')
