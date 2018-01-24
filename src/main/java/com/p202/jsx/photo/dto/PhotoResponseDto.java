@@ -1,4 +1,4 @@
-package com.p202.jsx.services.photo.dto;
+package com.p202.jsx.photo.dto;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
-package com.p202.jsx.services.photo;
+package com.p202.jsx.photo;
 
-import com.p202.jsx.services.photo.dto.PhotoResponseDto;
+import com.p202.jsx.photo.dto.PhotoResponseDto;
 
 import java.util.List;
 

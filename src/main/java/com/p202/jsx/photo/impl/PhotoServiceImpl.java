@@ -1,7 +1,7 @@
-package com.p202.jsx.services.photo.impl;
+package com.p202.jsx.photo.impl;
 
-import com.p202.jsx.services.photo.PhotoService;
-import com.p202.jsx.services.photo.dto.PhotoResponseDto;
+import com.p202.jsx.photo.PhotoService;
+import com.p202.jsx.photo.dto.PhotoResponseDto;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;

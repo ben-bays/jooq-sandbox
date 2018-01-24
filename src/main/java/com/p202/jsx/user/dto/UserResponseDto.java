@@ -1,4 +1,4 @@
-package com.p202.jsx.services.user.dto;
+package com.p202.jsx.user.dto;
 
 import java.util.Objects;
 

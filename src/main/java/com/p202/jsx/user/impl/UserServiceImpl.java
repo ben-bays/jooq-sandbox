@@ -1,16 +1,15 @@
-package com.p202.jsx.services.user.impl;
+package com.p202.jsx.user.impl;
 
 import com.p202.jsx.jooq.iam.tables.User;
 import com.p202.jsx.jooq.iam.tables.records.UserRecord;
-import com.p202.jsx.services.user.UserService;
-import com.p202.jsx.services.user.dto.UserResponseDto;
+import com.p202.jsx.user.UserService;
+import com.p202.jsx.user.dto.UserResponseDto;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

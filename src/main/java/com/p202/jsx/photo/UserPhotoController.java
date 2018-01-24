@@ -1,10 +1,12 @@
-package com.p202.jsx.controllers.photo;
+package com.p202.jsx.photo;
 
 
-import com.p202.jsx.services.photo.PhotoService;
-import com.p202.jsx.services.photo.dto.PhotoResponseDto;
+import com.p202.jsx.photo.dto.PhotoResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

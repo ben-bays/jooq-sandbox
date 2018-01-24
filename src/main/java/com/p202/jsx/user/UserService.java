@@ -1,6 +1,6 @@
-package com.p202.jsx.services.user;
+package com.p202.jsx.user;
 
-import com.p202.jsx.services.user.dto.UserResponseDto;
+import com.p202.jsx.user.dto.UserResponseDto;
 
 import java.util.List;
 

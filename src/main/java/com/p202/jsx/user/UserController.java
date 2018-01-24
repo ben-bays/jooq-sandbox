@@ -1,7 +1,6 @@
-package com.p202.jsx.controllers.user;
+package com.p202.jsx.user;
 
-import com.p202.jsx.services.user.UserService;
-import com.p202.jsx.services.user.dto.UserResponseDto;
+import com.p202.jsx.user.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
