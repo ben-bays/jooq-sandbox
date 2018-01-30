@@ -71,7 +71,6 @@ dependencies {
     runtime 'org.postgresql:postgresql:9.4.1212.jre7'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    compile 'org.testng:testng:6.9.6'
 }
 
 dependencyManagement {
