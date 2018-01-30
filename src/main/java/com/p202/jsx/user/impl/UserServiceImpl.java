@@ -1,11 +1,9 @@
 package com.p202.jsx.user.impl;
 
-import com.p202.jsx.jooq.iam.tables.User;
 import com.p202.jsx.jooq.iam.tables.records.UserRecord;
 import com.p202.jsx.user.UserService;
+import com.p202.jsx.user.dao.UserDao;
 import com.p202.jsx.user.dto.UserResponseDto;
-import org.jooq.DSLContext;
-import org.jooq.Result;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +14,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final DSLContext create;
+    private final UserDao userDao;
     private final ModelMapper mapper;
 
     @Autowired
     public UserServiceImpl(
-            final DSLContext create,
+            final UserDao userDao,
             final ModelMapper mapper) {
-        this.create = create;
+        this.userDao = userDao;
         this.mapper = mapper;
     }
 
@@ -33,12 +31,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDto> getUsers() {
 
-        final Result<UserRecord> allUsers = this.create
-                .selectFrom(User.USER)
-                .fetch();
+        final List<UserRecord> userRecords = userDao.getUsers();
 
-        return allUsers.stream()
+        return userRecords.stream()
                 .map(r -> mapper.map(r, UserResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public UserResponseDto getUser(final long userId) {
+        final UserRecord userRecord = userDao.getUser(userId);
+        return userRecord != null ? mapper.map(userRecord, UserResponseDto.class) : null;
     }
 }

@@ -1,19 +1,17 @@
 package com.p202.jsx.photo.impl;
 
 import com.p202.jsx.photo.PhotoService;
+import com.p202.jsx.photo.dao.PhotoDao;
 import com.p202.jsx.photo.dto.PhotoResponseDto;
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
+import com.p202.jsx.user.UserService;
+import com.p202.jsx.user.dto.UserResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.p202.jsx.jooq.core.tables.Photo.PHOTO;
-import static com.p202.jsx.jooq.iam.tables.User.USER;
 
 /**
  * @author Ben Bays <ben.bays@projekt202.com>
@@ -21,12 +19,14 @@ import static com.p202.jsx.jooq.iam.tables.User.USER;
 @Service
 public class PhotoServiceImpl implements PhotoService {
 
-    private final DSLContext create;
+    private final UserService userService;
+    private final PhotoDao photoDao;
     private final ModelMapper mapper;
 
     @Autowired
-    public PhotoServiceImpl(final DSLContext create, final ModelMapper mapper) {
-        this.create = create;
+    public PhotoServiceImpl(final UserService userService, final PhotoDao photoDao, final ModelMapper mapper) {
+        this.userService = userService;
+        this.photoDao = photoDao;
         this.mapper = mapper;
     }
 
@@ -36,16 +36,22 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public List<PhotoResponseDto> getPhotosByUserId(final long userId) {
 
-        final Result<Record> userPhotoRecords = create
-                .select()
-                .from(PHOTO)
-                .join(USER).onKey()
-                .where(PHOTO.OWNER_ID.eq(userId))
-                .fetch();
+        final UserResponseDto user = userService.getUser(userId);
 
-        return userPhotoRecords.stream()
+        if (null == user) {
+            return Collections.emptyList();
+        }
+
+        final List<PhotoResponseDto> photos = photoDao.getPhotosByUser(userId)
+                .stream()
                 .map(record -> mapper.map(record, PhotoResponseDto.class))
                 .collect(Collectors.toList());
+
+
+        photos.forEach(r -> r.setEmail(user.getEmail()));
+        photos.forEach(r -> r.setOwnerId(user.getId()));
+
+        return photos;
 
     }
 }

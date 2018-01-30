@@ -1,6 +1,5 @@
 package com.p202.jsx.photo.dto;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -33,10 +32,6 @@ public class PhotoResponseDto {
 
     public void setCreatedDate(LocalDateTime createdAt) {
         this.createdDate = createdAt;
-    }
-
-    public void setCreatedDate(final Timestamp timestamp) {
-        this.createdDate = timestamp.toLocalDateTime();
     }
 
     public String getDescription() {
