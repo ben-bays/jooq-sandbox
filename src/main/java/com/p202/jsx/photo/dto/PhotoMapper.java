@@ -11,8 +11,10 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(config = MapStructConfig.class)
 public interface PhotoMapper {
-    PhotoMapper INSTANCE = Mappers.getMapper(PhotoMapper.class);
 
+    /**
+     * @return A new {@link PhotoResponseDto}
+     */
     PhotoResponseDto recordToDto(
             final PhotoRecord record,
             final long ownerId,

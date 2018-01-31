@@ -21,13 +21,13 @@ public class PhotoServiceImpl implements PhotoService {
 
     private final UserService userService;
     private final PhotoDao photoDao;
-
-    private final static PhotoMapper photoMapper = PhotoMapper.INSTANCE;
+    private final PhotoMapper photoMapper;
 
     @Autowired
-    public PhotoServiceImpl(final UserService userService, final PhotoDao photoDao) {
+    public PhotoServiceImpl(final UserService userService, final PhotoDao photoDao, final PhotoMapper photoMapper) {
         this.userService = userService;
         this.photoDao = photoDao;
+        this.photoMapper= photoMapper;
     }
 
     /**
