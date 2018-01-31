@@ -2,6 +2,7 @@ package com.p202.jsx.photo.impl;
 
 import com.p202.jsx.photo.PhotoService;
 import com.p202.jsx.photo.dao.PhotoDao;
+import com.p202.jsx.photo.dto.PhotoMapper;
 import com.p202.jsx.photo.dto.PhotoResponseDto;
 import com.p202.jsx.user.UserService;
 import com.p202.jsx.user.dto.UserResponseDto;
@@ -21,13 +22,13 @@ public class PhotoServiceImpl implements PhotoService {
 
     private final UserService userService;
     private final PhotoDao photoDao;
-    private final ModelMapper mapper;
+
+    private final static PhotoMapper photoMapper = PhotoMapper.INSTANCE;
 
     @Autowired
-    public PhotoServiceImpl(final UserService userService, final PhotoDao photoDao, final ModelMapper mapper) {
+    public PhotoServiceImpl(final UserService userService, final PhotoDao photoDao) {
         this.userService = userService;
         this.photoDao = photoDao;
-        this.mapper = mapper;
     }
 
     /**
@@ -42,16 +43,9 @@ public class PhotoServiceImpl implements PhotoService {
             return Collections.emptyList();
         }
 
-        final List<PhotoResponseDto> photos = photoDao.getPhotosByUser(userId)
+        return photoDao.getPhotosByUser(userId)
                 .stream()
-                .map(record -> mapper.map(record, PhotoResponseDto.class))
+                .map(record -> photoMapper.recordToDto(record, user.getId(), user.getEmail()))
                 .collect(Collectors.toList());
-
-
-        photos.forEach(r -> r.setEmail(user.getEmail()));
-        photos.forEach(r -> r.setOwnerId(user.getId()));
-
-        return photos;
-
     }
 }
