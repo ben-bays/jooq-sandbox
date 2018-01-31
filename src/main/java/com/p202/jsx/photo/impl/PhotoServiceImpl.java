@@ -6,7 +6,6 @@ import com.p202.jsx.photo.dto.PhotoMapper;
 import com.p202.jsx.photo.dto.PhotoResponseDto;
 import com.p202.jsx.user.UserService;
 import com.p202.jsx.user.dto.UserResponseDto;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -66,9 +66,6 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.2.0.Final'
 
-    compile 'org.modelmapper.extensions:modelmapper-jooq:1.1.2'
-    compile 'org.modelmapper:modelmapper:1.1.0'
-
     runtime 'org.springframework.boot:spring-boot-devtools'
     runtime 'org.postgresql:postgresql:9.4.1212.jre7'
 
