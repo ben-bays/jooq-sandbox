@@ -21,6 +21,11 @@ plugins {
 
     // add jooq code generator tasks
     id 'nu.studer.jooq' version '2.0.9'
+
+    // configure annotation processor plugin (we use this instead of gradle's built in apt configuration
+    // because this one does some extra convenience items, such as allowing us to configure where
+    // generated source code goes and wiring up IntelliJ to know about it when you run ./gradlew idea
+    id 'net.ltgt.apt' version '0.13'
 }
 
 apply plugin: 'idea'
@@ -47,6 +52,8 @@ dependencies {
     // database driver to use for jooq code generator
     jooqRuntime 'org.postgresql:postgresql:9.4.1212.jre7'
 
+    apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
+
 
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-actuator-docs'
@@ -56,6 +63,8 @@ dependencies {
     compile 'org.jooq:jooq'
     //noinspection GrUnresolvedAccess
     compile "org.flywaydb:flyway-core:$flyway_version"
+
+    implementation 'org.mapstruct:mapstruct:1.2.0.Final'
 
     compile 'org.modelmapper.extensions:modelmapper-jooq:1.1.2'
     compile 'org.modelmapper:modelmapper:1.1.0'
@@ -121,8 +130,11 @@ jooq {
     }
 }
 
-generateJsxJooqSchemaSource.dependsOn clean
 generateJsxJooqSchemaSource.dependsOn flywayMigrate
+
+compileJava {
+    generatedSourcesDestinationDir = 'src/generated/java'
+}
 
 
 
